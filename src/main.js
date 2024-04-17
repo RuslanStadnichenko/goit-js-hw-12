@@ -22,7 +22,7 @@ searchForm.addEventListener('submit', (event) => {
         return; 
     } 
 
-    loader.classList.add('is-visible'); // Show loader when search is loading
+    loader.classList.add('is-visible'); 
 
     requestServer(searchInput.value)
         .then(obj => { 
@@ -39,7 +39,7 @@ searchForm.addEventListener('submit', (event) => {
         })
         .catch(error => console.log(error))
         .finally(() => {
-            loader.classList.remove('is-visible'); // Hide loader when search is done loading
+            loader.classList.remove('is-visible'); 
         });
 
     searchInput.value = '';

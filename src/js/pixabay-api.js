@@ -1,7 +1,9 @@
-export function requestServer(query) {
-    const API_KEY = '43393189-93860efddddd16832e4d2b268';
-    const SERV_URL = 'https://pixabay.com/api/';
+import axios from 'axios';
 
+const API_KEY = '43393189-93860efddddd16832e4d2b268';
+const SERV_URL = 'https://pixabay.com/api/';
+    
+export function requestServer(query) {
     const params = new URLSearchParams({
         key: API_KEY,
         q: query,

@@ -1,7 +1,7 @@
 import axios from "axios"
 
 axios.defaults.baseURL = 'https://pixabay.com'
-const API_KEY = '43393189-93860efddddd16832e4d2b268'
+const API_KEY = '43393189-93860efddddd16832e4d2b268';
 
 export function requestServer(searchWord, numberPage) {
     const searchParams = {

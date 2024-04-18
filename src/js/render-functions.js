@@ -1,28 +1,46 @@
-export function createGallery(images) {
-    return images.map(image =>
-` <li class="gallery-item">
-      <a class="gallery-link js-gallery-link" href="${image.largeImageURL}">
-        <img src="${image.webformatURL}" alt="${image.tags}" title="${image.tags}">
-      </a>
-      <div class="image-details">
-        <ul class="details-title">
-         <li class="details-title-det">
-           <h3 class="title-info">Likes:</h3>
-           <p class="paragraph-info">${image.likes}</p>
-         </li>
-         <li class="details-title-det">
-           <h3 class="title-info">Views:</h3>
-           <p class="paragraph-info">${image.views}</p>
-         </li>  
-         <li class="details-title-det">
-           <h3 class="title-info">Comments:</h3>
-           <p class="paragraph-info">${image.comments}</p>
-         </li>  
-         <li class="details-title-det">
-           <h3 class="title-info">Downloads:</h3>
-           <p class="paragraph-info">${image.downloads}</p>
-         </li>
-        </ul>
-      </div>
-    </li>`).join('');
+export function createCard(elements) {
+    return elements.map(elem => {
+        return `<li class="gallery-item">
+            <a class="gallery-item__link" href="${elem.largeImageURL}"><div class="img-container"><img class="gallery-img" src="${elem.webformatURL}" alt="${elem.tags}"></div>
+            <ul class="img-description__list">
+            <li class="img-description__item">
+                <p class="img-description__title">
+                Likes
+                </p>
+                <p class="img-description__text">
+                ${elem.likes}
+                </p>
+            </li>
+            <li class="img-description__item">
+                <p class="img-description__title">
+                Views
+                </p>
+                <p class="img-description__text">
+                ${elem.views}
+                </p>
+            </li>
+            <li>
+                <li class="img-description__item">
+                <p class="img-description__title">
+                    Comments
+                </p>
+                <p class="img-description__text">
+                    ${elem.comments}
+                </p>
+                </li>
+            </li>
+            <li>
+                <li class="img-description__item">
+                <p class="img-description__title">
+                    Downloads
+                </p>
+                <p class="img-description__text">
+                    ${elem.downloads}
+                </p>
+                </li>
+            </li>
+            </ul>
+        </a>
+      </li>`
+    }).join('')
 }

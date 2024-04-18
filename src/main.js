@@ -1,84 +1,97 @@
-import iziToast from "izitoast"; 
-import SimpleLightbox from "simplelightbox"; 
-import { requestServer } from './js/pixabay-api.js'; 
-import { createGallery } from './js/render-functions.js'; 
+import iziToast from "izitoast";
+import SimpleLightbox from "simplelightbox";
 
-const searchForm = document.querySelector('.js-search-form'); 
-const searchInput = document.querySelector('.js-search-input'); 
-const listGallery = document.querySelector('.gallery-list'); 
-const loader = document.querySelector('.loader');
-const loadMoreBtn = document.querySelector('.gallery-btn')
+import { requestServer } from "./js/pixabay-api";
+import { createCard } from "./js/render-functions";
 
+
+const formElem = document.querySelector('.form')
+const inputFormElem = document.querySelector('.form-input')
+const galleryListElem = document.querySelector('.gallery-list')
+const loaderElem = document.querySelector('.loader')
+const loadMoreBtnElem = document.querySelector('.gallery-btn')
+
+let textInput = null
 let numberPage = 1
 
 async function inputSearch(event) {
     event.preventDefault();
 
-    numberPage = 1;
+    textInput = inputFormElem.value
+    numberPage = 1
 
-    if (searchInput.value.trim() === '') {
-        iziToast.error({
+    if (textInput.trim() === '') {
+       iziToast.error({
             message: 'Enter a search name',
             position: 'topRight',
-        });
-        listGallery.innerHTML = '';
-        return;
+        })
+        galleryListElem.innerHTML = ''
+
+        return
     }
 
     try {
-        loader.classList.add('is-visible');
-        listGallery.innerHTML = '';
-        searchInput.value = '';
-        const { obj } = await requestServer(textInput, numberPage);
-        loader.classList.remove('is-visible');
+        loaderElem.classList.add('is-visible')
 
-        if (!obj || !obj.hits || obj.hits.length === 0) {
+
+        galleryListElem.innerHTML = ''
+
+
+        inputFormElem.value = ''
+
+        const { data } = await requestServer(textInput, numberPage)
+        loaderElem.classList.remove('is-visible')
+
+        if (!data.hits.length) {
             iziToast.error({
-                title: 'Error',
-                message: 'Photo not found',
-                position: 'topRight',
+                      title: 'Error', 
+                    message: 'Photo not found', 
+                    position: 'topRight', 
             });
-            return;
+            return
         }
 
-        if (obj && obj.hits && obj.hits.length > 0) {
-            loadMoreBtn.classList.add('is-hidden');
-            loadMoreBtn.removeEventListener('click', onLoadMoreBtn);
+        if(data.hits.length >= data.totalHits) {
+            loadMoreBtnElem.classList.add('is-hidden')
+            loadMoreBtnElem.removeEventListener('click', onLoadMoreBtn)
+
             iziToast.info({
-                message: "End of search results.",
+                message: "We're sorry, but you've reached the end of search results.",
+                backgroundColor: 'blue',
+                theme: 'light',
                 position: 'topRight',
             });
         } else {
-            loadMoreBtn.classList.remove('is-hidden');
+            loadMoreBtnElem.classList.remove('is-hidden')
         }
 
-        listGallery.innerHTML = createGallery(obj.hits);
-        loadMoreBtn.addEventListener('click', onLoadMoreBtn);
-        libraryLightBox.refresh();
+        galleryListElem.innerHTML = createCard(data.hits)
+        loadMoreBtnElem.addEventListener('click', onLoadMoreBtn)
 
-        searchInput.value = '';
+        gallery.refresh()
+
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
 }
 
+let gallery = new SimpleLightbox('.gallery-item__link', {
+    captionsData: 'alt',
+    captionDelay: 250
+}
+);
 
-
-let libraryLightBox = new SimpleLightbox('.js-gallery-link', { 
-    captionDelay: 250, 
-    captionsData: 'alt', 
+gallery.on('show.simplelightbox', function (event) {
+    event.preventDefault()
 });
 
-libraryLightBox.on('show.simplelightbox', event => { 
-    event.preventDefault(); 
-});
 
 async function onLoadMoreBtn() {
     try {
         numberPage++
-        const { obj } = await requestServer(textInput, numberPage)
+        const { data } = await requestServer(textInput, numberPage)
 
-        listGallery.insertAdjacentHTML('beforeend', createGallery(obj.hits))
+        galleryListElem.insertAdjacentHTML('beforeend', createCard(data.hits))
 
         function getCardHeight() {
             const card = document.querySelector('.gallery-item')
@@ -94,11 +107,11 @@ async function onLoadMoreBtn() {
         }
         const cardHeight = getCardHeight()
         smoothScroll(cardHeight * 2)
-     
+   
 
     } catch (error) {
         console.log(error)
     }
 }
 
-searchForm.addEventListener('submit', inputSearch)
+formElem.addEventListener('submit', inputSearch)

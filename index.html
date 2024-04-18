@@ -8,25 +8,30 @@
     
     <script type="module" crossorigin src="/goit-js-hw-12/commonHelpers.js"></script>
     <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/vendor-4d51048b.js">
-    <link rel="stylesheet" href="/goit-js-hw-12/assets/index-e707e1a3.css">
+    <link rel="stylesheet" href="/goit-js-hw-12/assets/index-171d9cce.css">
   </head>
   <body>
-    <div class="search-container">
-      <form class="search-form js-search-form" action="search.php" method="GET">
+    <div class="container">
+      <form class="form js-search-form">
         <input
-          class="search-input js-search-input"
+          class="form-input js-search-input"
           type="text"
-          name="query"
+          name="formInput"
           placeholder="Пошук..."
+          required
         />
-        <button class="search-btn" type="submit">Пошук</button>
+        <button class="form-btn" type="submit" name="formBtn">Search</button>
       </form>
+
+      <div class="gallery">
+        <span class="loader"></span>
+
+        <ul class="gallery-list"></ul>
+
+        <button class="gallery-btn is-hidden">Load more</button>
+      </div>
     </div>
-    <div class="gallery">
-      <span class="loader"></span>
-      <ul class="gallery-list"></ul>
-    </div>
-    <button class="gallery-btn is-hidden">Load more</button>
+
     
   </body>
 </html>
